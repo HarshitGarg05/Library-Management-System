@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-search"></i> Search Books</h2>
+    </div>
+    <div class="card-body">
+        <div class="search-container">
+            <form action="{{ url_for('search_book') }}" method="POST" class="search-form">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search input-icon"></i>
+                    <input type="search" id="search_query" name="search_query" placeholder="Enter book title, ISBN, or author" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </form>
+        </div>
+        
+        {% if books is not none %}
+            {% if books|length > 0 %}
+                <div class="table-responsive">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>ISBN</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                                <tr>
+                                    <td><span class="isbn-badge">{{ book.isbn }}</span></td>
+                                    <td>
+                                        <div class="book-info">
+                                            <i class="fas fa-book book-icon"></i>
+                                            <span>{{ book.title }}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{ book.author }}</td>
+                                    <td>
+                                        {% if book.issued %}
+                                            <span class="badge badge-danger">
+                                                <i class="fas fa-clock"></i> Issued
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-success">
+                                                <i class="fas fa-check-circle"></i> Available
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>No Results Found</h3>
+                    <p>No books found matching your search criteria. Try using different keywords.</p>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    .card {
+        background-color: white;
+        border-radius: var(--radius);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .card-header i {
+        margin-right: 0.75rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .search-container {
+        margin-bottom: 2rem;
+    }
+    
+    .search-form {
+        display: flex;
+        gap: 1rem;
+        max-width: 800px;
+    }
+    
+    .search-input-wrapper {
+        position: relative;
+        flex: 1;
+    }
+    
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 1rem;
+    }
+    
+    input[type="search"] {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 2.75rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 50px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    input[type="search"]:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+    }
+    
+    input[type="search"]::placeholder {
+        color: #b3b3b3;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1.5rem;
+        height: 48px; /* Match input height */
+        font-size: 1rem;
+        font-weight: 500;
+        text-align: center;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+    
+    .btn i {
+        margin-right: 0.5rem;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+    }
+    
+    .btn-primary:hover {
+        box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        transform: translateY(-2px);
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+    }
+    
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    .modern-table th {
+        background-color: rgba(67, 97, 238, 0.05);
+        color: var(--dark-color);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-size: 0.85rem;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    .modern-table td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        color: var(--dark-color);
+        vertical-align: middle;
+    }
+    
+    .modern-table tbody tr {
+        transition: background-color 0.3s ease;
+    }
+    
+    .modern-table tbody tr:hover {
+        background-color: rgba(67, 97, 238, 0.03);
+    }
+    
+    .book-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .book-icon {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .isbn-badge {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        border-radius: 30px;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: inline-block;
+    }
+    
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .badge i {
+        margin-right: 0.35rem;
+        font-size: 0.85rem;
+    }
+    
+    .badge-danger {
+        background-color: rgba(247, 37, 133, 0.15);
+        color: var(--danger-color);
+    }
+    
+    .badge-success {
+        background-color: rgba(76, 201, 240, 0.15);
+        color: var(--success-color);
+    }
+    
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3.5rem 1.5rem;
+        text-align: center;
+    }
+    
+    .empty-state-icon {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        font-size: 2rem;
+    }
+    
+    .empty-state h3 {
+        font-weight: 600;
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: var(--dark-color);
+    }
+    
+    .empty-state p {
+        color: var(--text-muted);
+        max-width: 400px;
+    }
+    
+    @media (max-width: 768px) {
+        .search-form {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+        
+        .modern-table {
+            min-width: 700px;
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-book"></i> Library Management System</h2>
+    </div>
+    
+    <div class="dashboard-stats">
+        <div class="row">
+            <div class="stat-card">
+                <i class="fas fa-book stat-icon"></i>
+                <div class="stat-info">
+                    <h3>Total Books</h3>
+                    <p class="stat-number">{{ books|length }}</p>
+                </div>
+            </div>
+            
+            {% set issued_count = 0 %}
+            {% for book in books %}
+                {% if book.issued %}
+                    {% set issued_count = issued_count + 1 %}
+                {% endif %}
+            {% endfor %}
+            
+            <div class="stat-card">
+                <i class="fas fa-share stat-icon"></i>
+                <div class="stat-info">
+                    <h3>Issued Books</h3>
+                    <p class="stat-number">{{ issued_count }}</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <i class="fas fa-book-open stat-icon"></i>
+                <div class="stat-info">
+                    <h3>Available Books</h3>
+                    <p class="stat-number">{{ books|length - issued_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-list"></i> Book Collection</h2>
+    </div>
+    
+    {% if books %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                    <tr>
+                        <td>{{ book.isbn }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>
+                            {% if book.issued %}
+                                <span class="badge badge-danger">Issued</span>
+                            {% else %}
+                                <span class="badge badge-success">Available</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No books in the library yet. <a href="{{ url_for('add_book') }}">Add some books</a> to get started.</p>
+    {% endif %}
+</div>
+
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3a0ca3;
+        --success-color: #4cc9f0;
+        --danger-color: #f72585;
+        --warning-color: #fca311;
+        --light-color: #f8f9fa;
+        --dark-color: #212529;
+        --text-muted: #6c757d;
+        --radius: 8px;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card {
+        background-color: white;
+        border-radius: var(--radius);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .card-header h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .card-header i {
+        margin-right: 0.75rem;
+    }
+    
+    .dashboard-stats {
+        padding: 1.5rem;
+    }
+    
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -1rem;
+    }
+    
+    .stat-card {
+        flex: 1;
+        background-color: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 1.5rem;
+        margin: 0 1rem 1rem;
+        display: flex;
+        align-items: center;
+        min-width: 200px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 5px solid var(--primary-color);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    }
+    
+    .stat-card:nth-child(1) {
+        border-left-color: var(--primary-color);
+    }
+    
+    .stat-card:nth-child(2) {
+        border-left-color: var(--danger-color);
+    }
+    
+    .stat-card:nth-child(3) {
+        border-left-color: var(--success-color);
+    }
+    
+    .stat-icon {
+        font-size: 2.5rem;
+        padding: 1rem;
+        border-radius: 50%;
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+        margin-right: 1.5rem;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .stat-card:nth-child(1) .stat-icon {
+        background-color: rgba(67, 97, 238, 0.1);
+        color: var(--primary-color);
+    }
+    
+    .stat-card:nth-child(2) .stat-icon {
+        background-color: rgba(247, 37, 133, 0.1);
+        color: var(--danger-color);
+    }
+    
+    .stat-card:nth-child(3) .stat-icon {
+        background-color: rgba(76, 201, 240, 0.1);
+        color: var(--success-color);
+    }
+    
+    .stat-info h3 {
+        font-size: 1rem;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+    
+    .stat-number {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: var(--dark-color);
+        margin-bottom: 0;
+        line-height: 1;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+        padding: 0 1.5rem 1.5rem;
+    }
+    
+    th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    
+    thead {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    th {
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+    
+    tbody tr {
+        transition: background-color 0.3s ease;
+    }
+    
+    tbody tr:hover {
+        background-color: rgba(67, 97, 238, 0.03);
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .badge-danger {
+        background-color: rgba(247, 37, 133, 0.15);
+        color: var(--danger-color);
+    }
+    
+    .badge-success {
+        background-color: rgba(76, 201, 240, 0.15);
+        color: var(--success-color);
+    }
+    
+    a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    a:hover {
+        color: var(--secondary-color);
+    }
+    
+    @media (max-width: 768px) {
+        .row {
+            flex-direction: column;
+        }
+        
+        .stat-card {
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}

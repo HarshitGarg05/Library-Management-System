@@ -1,58 +1,92 @@
-Library Management System 📚
+# 📚 Library Management System
 
-This is a Flask-based Library Management System that allows users to add, edit, and delete books in a MySQL database. The system provides a simple web interface with a sidebar for easy navigation and a dropdown selection to manage books efficiently.
+A **Flask-based Library Management System** that allows users to **add, edit, and delete books** from a MySQL database. The system provides a user-friendly web interface for efficient book management.
 
-🚀 Features
-✅ Add Books – Users can add new books with a title, author, and ISBN.
-✅ Edit Books – Select a book by its unique ID and update its details.
-✅ Delete Books – Remove books from the database with a confirmation prompt.
-✅ MySQL Database Integration – Uses MySQL to store and manage book records.
-✅ Flash Messages – Provides user-friendly success/error notifications.
-✅ Responsive UI – A clean and simple interface for easy book management.
+## 🚀 Features
 
-🛠️ Tech Stack
-Backend: Flask (Python)
+* ✅ **Add Books** – Users can add new books with title, author, and ISBN.
+* ✅ **Edit Books** – Select a book by its unique ID and update details.
+* ✅ **Delete Books** – Remove books from the database with confirmation.
+* ✅ **MySQL Database Integration** – Uses MySQL to store and manage books.
+* ✅ **Flash Messages** – Displays success/error notifications.
+* ✅ **Responsive UI** – Clean and simple design for better user experience.
 
-Frontend: HTML, CSS, Bootstrap
+## 🛠️ Tech Stack
 
-Database: MySQL
+* **Backend:** Flask (Python)
+* **Frontend:** HTML, CSS, Bootstrap
+* **Database:** MySQL
 
-📂 Project Structure
+## 💂️ Project Structure
+
+```
 /library_management
 │── app.py                # Flask backend logic
 │── templates/
 │   ├── edit_book.html    # Edit/Delete book UI
 │   ├── add_book.html     # Add book UI
 │── static/
-│   ├── styles.css        # Custom styling
+│   └── styles.css        # Custom styling
 │── requirements.txt      # Dependencies
 │── README.md             # Project documentation
+```
 
-🎯 How to Run
-Clone the repository
+## 🎯 Installation & Setup
 
+### 1⃣ Clone the Repository
+
+```bash
 git clone https://github.com/yourusername/library-management.git
 cd library-management
-Install dependencies
+```
 
+### 2⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
-Set up the MySQL database
+```
 
+### 3⃣ Set Up MySQL Database
 
+Run the following SQL queries in MySQL:
+
+```sql
 CREATE DATABASE library_db;
-USE library_db.sql in SQL in phpmyadmin
+USE library_db;
+CREATE TABLE books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    isbn VARCHAR(20) UNIQUE NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    issued TINYINT(1) DEFAULT 0
+);
+```
 
-Run the Flask app
+### 4⃣ Run the Flask App
 
+```bash
 python app.py
-Open in browser
+```
 
-Navigate to http://127.0.0.1:5000/
+### 5⃣ Open in Browser
+* Navigate to **http://127.0.0.1:5000/**
 
-🛠️ Contributing
-Feel free to fork the repository, create a new branch, and submit a pull request. Contributions are welcome!
+## 💡 How to Use
 
-📜 License
-This project is open-source under the MIT License.
+1. **Add a Book** – Enter details and click **Add**.
+2. **Edit a Book** – Select a book by its **ID**, modify details, and save.
+3. **Delete a Book** – Select a book and click **Delete**.
 
-🚀 Happy Coding! 🎉
+## 🛠️ Contributing
+
+* Fork the repository 🍴
+* Create a new branch 🌿
+* Submit a pull request 🛠️
+
+All contributions are welcome!
+
+## 🐝 License
+
+This project is open-source under the **MIT License**.
+
+## 🚀 **Happy Coding!** 🎉

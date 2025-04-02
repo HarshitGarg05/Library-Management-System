@@ -48,19 +48,7 @@ pip install -r requirements.txt
 
 ### 3⃣ Set Up MySQL Database
 
-Run the following SQL queries in MySQL:
-
-```sql
-CREATE DATABASE library_db;
-USE library_db;
-CREATE TABLE books (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    isbn VARCHAR(20) UNIQUE NOT NULL,
-    title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    issued TINYINT(1) DEFAULT 0
-);
-```
+Run the SQL queries in MySQL (library_db.sql)
 
 ### 4⃣ Run the Flask App
 
